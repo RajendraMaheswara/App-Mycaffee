@@ -126,9 +126,45 @@ class MenuService {
     return false;
   }
 
-  // Placeholder untuk UPDATE
+  // Update menu (UPDATE)
   Future<bool> updateMenu(int id, Map<String, dynamic> data) async {
-    print('UPDATE Menu ID $id (placeholder)');
-    return false;
+    try {
+      print('Attempting to update menu with ID: $id');
+      print('URL: $baseUrl/$id');
+      print('Data: $data');
+
+      final response = await http.put(
+        Uri.parse('$baseUrl/$id'),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(data),
+      );
+
+      print('Update response status: ${response.statusCode}');
+      print('Update response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        if (responseData['success'] == true) {
+          print('Menu updated successfully');
+          return true;
+        } else {
+          throw Exception(responseData['message'] ?? 'Gagal mengupdate menu');
+        }
+      } else if (response.statusCode == 404) {
+        throw Exception('Menu tidak ditemukan');
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
+        throw Exception('Tidak memiliki izin untuk mengupdate menu');
+      } else {
+        throw Exception(
+          'Gagal mengupdate menu. Status: ${response.statusCode}',
+        );
+      }
+    } catch (e) {
+      print('Error in updateMenu: $e');
+      rethrow;
+    }
   }
 }

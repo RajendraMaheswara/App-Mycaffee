@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../services/menu_service.dart';
 import '../../models/menu.dart';
+import 'edit_menu_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -168,10 +169,17 @@ class _MenuPageState extends State<MenuPage> {
             // Tombol aksi
             Column(
               children: [
-                // Placeholder untuk UPDATE
                 IconButton(
-                  onPressed: () {
-                    _showSnackBar('Fitur edit menu (oleh anggota lain)');
+                  onPressed: () async {
+                    final result = await Navigator.push<bool>(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditMenuPage(menu: menu),
+                      ),
+                    );
+                    if (result == true) {
+                      _loadMenus(); // Refresh list jika ada perubahan
+                    }
                   },
                   icon: const Icon(Icons.edit, color: Colors.blue),
                 ),
