@@ -158,17 +158,66 @@ class _EditMenuPageState extends State<EditMenuPage> {
                     ),
 
                     // Kategori
-                    _buildTextField(
-                      label: 'Kategori',
-                      controller: _kategoriController,
-                      hint: 'Contoh: Minuman',
-                      keyboardType: TextInputType.text,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Kategori tidak boleh kosong';
-                        }
-                        return null;
-                      },
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Kategori',
+                          style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF5C4033),
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        DropdownButtonFormField<String>(
+                          value: _kategoriController.text,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Kategori tidak boleh kosong';
+                            }
+                            return null;
+                          },
+                          decoration: InputDecoration(
+                            hintText: 'Pilih kategori',
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(color: Colors.grey),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                              borderSide: const BorderSide(
+                                color: Color(0xFF5C4033),
+                                width: 2,
+                              ),
+                            ),
+                            contentPadding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 12,
+                            ),
+                          ),
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'Snack',
+                              child: Text('Snack'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Makanan',
+                              child: Text('Makanan'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Kopi',
+                              child: Text('Kopi'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            if (value != null) {
+                              _kategoriController.text = value;
+                            }
+                          },
+                        ),
+                        const SizedBox(height: 16),
+                      ],
                     ),
 
                     // Stok
