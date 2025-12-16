@@ -3,14 +3,14 @@ import 'package:http/http.dart' as http;
 import '../models/menu.dart';
 
 class MenuService {
-  // Gunakan IP lokal untuk Android emulator/device
+  // Gunakan IP lokal
   static const String baseUrl = 'http://localhost:8000/api/menu';
 
   // Get all menu (READ)
   Future<List<Menu>> getMenus() async {
     try {
       final response = await http.get(
-        Uri.parse(baseUrl), // Pastikan endpoint benar
+        Uri.parse(baseUrl),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -82,14 +82,14 @@ class MenuService {
     }
   }
 
-  // Delete menu (DELETE) - PERBAIKAN UTAMA
+  // Delete menu (DELETE)
   Future<bool> deleteMenu(int id) async {
     try {
       print('Attempting to delete menu with ID: $id');
       print('URL: $baseUrl/$id');
 
       final response = await http.delete(
-        Uri.parse('$baseUrl/$id'), // Pastikan endpoint sama dengan React
+        Uri.parse('$baseUrl/$id'),
         headers: {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ class MenuService {
       }
     } catch (e) {
       print('Error in deleteMenu: $e');
-      rethrow; // Biarkan error ditangkap di UI
+      rethrow;
     }
   }
 

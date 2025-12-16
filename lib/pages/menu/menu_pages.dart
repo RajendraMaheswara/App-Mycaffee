@@ -66,7 +66,7 @@ class _MenuPageState extends State<MenuPage> {
       try {
         await _menuService.deleteMenu(id);
         _showSnackBar('Menu berhasil dihapus!');
-        _loadMenus(); // Refresh list
+        _loadMenus();
       } catch (e) {
         _showSnackBar('Gagal menghapus menu: $e');
       }
