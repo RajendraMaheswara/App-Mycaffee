@@ -120,10 +120,42 @@ class MenuService {
     }
   }
 
-  // Placeholder untuk CREATE
+  // Create menu (CREATE)
   Future<bool> createMenu(Map<String, dynamic> data) async {
-    print('CREATE Menu (placeholder)');
-    return false;
+    try {
+      print('Attempting to create menu');
+      print('URL: $baseUrl');
+      print('Data: $data');
+
+      final response = await http.post(
+        Uri.parse(baseUrl),
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(data),
+      );
+
+      print('Create response status: ${response.statusCode}');
+      print('Create response body: ${response.body}');
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        final Map<String, dynamic> responseData = json.decode(response.body);
+        if (responseData['success'] == true) {
+          print('Menu created successfully');
+          return true;
+        } else {
+          throw Exception(responseData['message'] ?? 'Gagal membuat menu');
+        }
+      } else if (response.statusCode == 401 || response.statusCode == 403) {
+        throw Exception('Tidak memiliki izin untuk membuat menu');
+      } else {
+        throw Exception('Gagal membuat menu. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in createMenu: $e');
+      rethrow;
+    }
   }
 
   // Update menu (UPDATE)

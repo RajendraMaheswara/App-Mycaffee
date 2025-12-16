@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../services/menu_service.dart';
 import '../../models/menu.dart';
 import 'edit_menu_page.dart';
+import 'create_menu_page.dart';
 
 class MenuPage extends StatefulWidget {
   const MenuPage({super.key});
@@ -216,10 +217,15 @@ class _MenuPageState extends State<MenuPage> {
             style: TextStyle(color: Colors.grey),
           ),
           const SizedBox(height: 16),
-          // Placeholder untuk CREATE
           ElevatedButton(
-            onPressed: () {
-              _showSnackBar('Fitur tambah menu (oleh anggota lain)');
+            onPressed: () async {
+              final result = await Navigator.push<bool>(
+                context,
+                MaterialPageRoute(builder: (context) => const CreateMenuPage()),
+              );
+              if (result == true) {
+                _loadMenus(); // Refresh list jika ada perubahan
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF5C4033),
@@ -251,10 +257,15 @@ class _MenuPageState extends State<MenuPage> {
               itemCount: _menus.length,
               itemBuilder: (context, index) => _buildMenuItem(_menus[index]),
             ),
-      // Placeholder untuk CREATE
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          _showSnackBar('Fitur tambah menu (oleh anggota lain)');
+        onPressed: () async {
+          final result = await Navigator.push<bool>(
+            context,
+            MaterialPageRoute(builder: (context) => const CreateMenuPage()),
+          );
+          if (result == true) {
+            _loadMenus(); // Refresh list jika ada perubahan
+          }
         },
         backgroundColor: const Color(0xFF5C4033),
         child: const Icon(Icons.add, color: Colors.white),
