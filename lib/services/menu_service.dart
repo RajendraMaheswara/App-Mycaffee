@@ -4,7 +4,7 @@ import '../models/menu.dart';
 
 class MenuService {
   // Gunakan IP lokal untuk Android emulator/device
-  static const String baseUrl = 'http://127.0.0.1:8000/api/menu';
+  static const String baseUrl = 'http://localhost:8000/api/menu';
 
   // Get all menu (READ)
   Future<List<Menu>> getMenus() async {

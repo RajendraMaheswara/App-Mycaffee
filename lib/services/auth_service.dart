@@ -1,27 +1,50 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../api/api.dart';
 
 class AuthService {
-  static const String baseUrl = "http://127.0.0.1:8000/api";
+  static const _tokenKey = 'token';
 
-  Future<Map<String, dynamic>> login(String login, String password) async {
+  static Future<bool> login(String login, String password) async {
     final response = await http.post(
-      Uri.parse("$baseUrl/login"),
-      headers: {
-        "Accept": "application/json",
-      },
-      body: {
-        "login": login,
-        "password": password,
-      },
+      Uri.parse('${Api.baseUrl}/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'login': login,
+        'password': password,
+      }),
     );
 
-    final data = json.decode(response.body);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString(_tokenKey, data['token']);
+      return true;
+    } else {
+      return false;
+    }
+  }
 
-    if (response.statusCode != 200) {
-      throw data["message"] ?? "Login gagal";
+  static Future<void> logout() async {
+    final prefs = await SharedPreferences.getInstance();
+    final token = prefs.getString(_tokenKey);
+
+    if (token != null) {
+      await http.post(
+        Uri.parse('${Api.baseUrl}/logout'),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+      );
     }
 
-    return data; // { token, user }
+    await prefs.remove(_tokenKey);
+  }
+
+  static Future<String?> getToken() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getString(_tokenKey);
   }
 }

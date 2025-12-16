@@ -1,8 +1,33 @@
 import 'package:flutter/material.dart';
+import 'pages/auth/login_pages.dart';
 import 'pages/menu/menu_pages.dart';
 
 void main() {
-  runApp(const MaterialApp(home: HomePage()));
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: 'MyCaffee Admin',
+      theme: ThemeData(
+        primaryColor: const Color(0xFF5C4033),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF5C4033),
+        ),
+      ),
+      initialRoute: '/login',
+      routes: {
+        '/login': (_) => const LoginPage(),
+        '/home': (_) => const HomePage(),
+        '/menu': (_) => const MenuPage(),
+      },
+    );
+  }
 }
 
 class HomePage extends StatelessWidget {
@@ -35,13 +60,11 @@ class HomePage extends StatelessWidget {
             const SizedBox(height: 30),
             ElevatedButton(
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const MenuPage()),
-                );
+                Navigator.pushNamed(context, '/menu');
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: const Color(0xFF5C4033),
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(
                   horizontal: 30,
                   vertical: 15,
@@ -49,7 +72,7 @@ class HomePage extends StatelessWidget {
               ),
               child: const Text(
                 'Kelola Menu',
-                style: TextStyle(fontSize: 18, color: Colors.white),
+                style: TextStyle(fontSize: 18),
               ),
             ),
           ],

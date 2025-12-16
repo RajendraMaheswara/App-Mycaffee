@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../services/menu_service.dart';
+import '../../services/auth_service.dart';
 import '../../models/menu.dart';
 import 'edit_menu_page.dart';
 import 'create_menu_page.dart';
@@ -68,6 +69,33 @@ class _MenuPageState extends State<MenuPage> {
         _loadMenus(); // Refresh list
       } catch (e) {
         _showSnackBar('Gagal menghapus menu: $e');
+      }
+    }
+  }
+
+  Future<void> _logout() async {
+    bool? confirm = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Yakin ingin keluar?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('Logout'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirm == true) {
+      await AuthService.logout();
+      if (mounted) {
+        Navigator.pushReplacementNamed(context, '/login');
       }
     }
   }
@@ -247,6 +275,12 @@ class _MenuPageState extends State<MenuPage> {
         title: const Text('Kelola Menu'),
         backgroundColor: const Color(0xFF5C4033),
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            onPressed: _logout,
+            icon: const Icon(Icons.logout),
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
