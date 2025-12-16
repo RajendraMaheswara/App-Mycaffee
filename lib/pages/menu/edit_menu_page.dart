@@ -51,7 +51,6 @@ class _EditMenuPageState extends State<EditMenuPage> {
     });
 
     try {
-      // Siapkan data untuk dikirim ke backend
       final Map<String, dynamic> updateData = {
         'nama_menu': _namaController.text,
         'kategori': _kategoriController.text,
@@ -66,7 +65,7 @@ class _EditMenuPageState extends State<EditMenuPage> {
 
       // Kembali ke halaman menu
       if (!mounted) return;
-      Navigator.pop(context, true); // Return true untuk indicate data berubah
+      Navigator.pop(context, true); 
     } catch (e) {
       _showSnackBar('Gagal mengupdate menu: $e');
     } finally {
